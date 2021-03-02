@@ -20,16 +20,20 @@ import {Redirect} from 'react-router-dom'
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
-const Dashboard = () => {
-
+const Dashboard = (props) => {
+  
+  const user = props.location.state.user;
+  
   return (
     <>
+      <h2><center>Welcome, {user.fullname}</center></h2>
+      <hr></hr>
       {/* <WidgetsDropdown /> */}
       <CCard>
         <CCardBody>
           <CRow>
             <CCol sm="5">
-              <h4 id="traffic" className="card-title mb-0">Traffic</h4>
+              <h4 id="traffic" className="card-title mb-0"></h4>
               <div className="small text-muted">November 2017</div>
             </CCol>
             <CCol sm="7" className="d-none d-md-block">

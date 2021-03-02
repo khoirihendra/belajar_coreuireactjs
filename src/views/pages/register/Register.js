@@ -31,6 +31,7 @@ const Register = () => {
       fullname: document.getElementById("fullname").value,
       username: document.getElementById("username").value,
       password: document.getElementById("password").value,
+      email: document.getElementById("email").value,
       confirmPassword: document.getElementById("confirmPassword").value
     }
 
@@ -120,6 +121,12 @@ const Register = () => {
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput type="text" id="fullname" placeholder="Full Name" autoComplete="fullname" />
+                  </CInputGroup>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupPrepend>
+                      <CInputGroupText>@</CInputGroupText>
+                    </CInputGroupPrepend>
+                    <CInput type="email" id="email" placeholder="Email" autoComplete="email" />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>

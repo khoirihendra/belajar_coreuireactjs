@@ -21,7 +21,9 @@ import { GoogleLogin } from 'react-google-login';
 const Login = () => {
 
   const [user, setUser] = useState(null);
+  const [googleProfile, setGoogleProfile] = useState(null);
   const [alert, setAlert] = useState(null);
+  const [redirectToRegister, setRedirectToRegister] = useState(false);
 
   if(user == null) {
     localStorage.clear();
@@ -31,6 +33,13 @@ const Login = () => {
                 pathname:'/dashboard',
                 state: {user : user}
               }} ></Redirect>
+  }
+
+  if(redirectToRegister) {
+    return <Redirect to={{
+      pathname:'/register',
+      state: {googleProfile : googleProfile}
+    }} ></Redirect>
   }
 
   const failedLoginGoogle = () => {
@@ -92,22 +101,30 @@ const Login = () => {
     const data = {
       "accessToken" : response.accessToken
     }
+    
     axios.post('login-google-admin', data).then(
       res => {
         let msg = "";
-        if (res.data.status && (res.data.data.user.userid != null)) {
-          localStorage.setItem("token", res.data.data.token);
-          localStorage.setItem("userid", res.data.data.user.userid);
+        if (res.data.status) {
+          if(res.data.data.user.userid == null) {
+            localStorage.clear();
 
-          setUser(res.data.data.user);
-          setAlert(null);
+            setAlert(msg);
+            setUser(null);
+            setGoogleProfile(response.profileObj);
+            setRedirectToRegister(true);
+            
+          }
+          else {
+            localStorage.setItem("token", res.data.data.token);
+            localStorage.setItem("userid", res.data.data.user.userid);
+  
+            setUser(res.data.data.user);
+            setAlert(null);
+          }
         }
         else {
-          msg = (
-            <div className='alert alert-danger' role='alert'>
-              {res.data.message}
-            </div>
-          );
+          msg = (<div className='alert alert-danger' role='alert'>{res.data.message}</div>);
 
           localStorage.clear();
           setAlert(msg);
@@ -116,11 +133,7 @@ const Login = () => {
       }
     ).catch(
       err => {
-        let msg = (
-          <div className='alert alert-danger' role='alert'>
-            {err}
-          </div>
-        );
+        let msg = (<div className='alert alert-danger' role='alert'>{err}</div>);
 
         localStorage.clear();
         setAlert(msg);

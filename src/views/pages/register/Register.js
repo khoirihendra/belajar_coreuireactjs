@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import {
   CButton,
@@ -17,11 +17,22 @@ import {
 import CIcon from '@coreui/icons-react'
 import axios from 'axios'
 
-const Register = () => {
+const Register = (props) => {
 
   const [alert, setAlert] = useState(null);
+  const [googleProfile, setGoogleProfile] = useState(null);
 
   localStorage.clear();
+
+  
+  useEffect(()=>{
+    if(props.location.state != null) {
+      if(props.location.state.googleProfile != null) {
+        console.log(props.location.state);
+        setGoogleProfile(props.location.state.googleProfile)
+      }
+    }}, []);
+    
 
   const handleSubmit = () => {
     let msg = "";
@@ -120,13 +131,13 @@ const Register = () => {
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
-                    <CInput type="text" id="fullname" placeholder="Full Name" autoComplete="fullname" />
+                    <CInput type="text" id="fullname" defaultValue={(googleProfile) ? googleProfile.name : null} placeholder="Full Name" autoComplete="fullname" />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
-                    <CInput type="email" id="email" placeholder="Email" autoComplete="email" />
+                    <CInput type="email" id="email" defaultValue={(googleProfile) ? googleProfile.email : null} placeholder="Email" autoComplete="email" />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>

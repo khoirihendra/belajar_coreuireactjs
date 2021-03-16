@@ -101,7 +101,7 @@ const Login = () => {
     const data = {
       "accessToken" : response.accessToken
     }
-    
+    console.log(data.accessToken);
     axios.post('login-google-admin', data).then(
       res => {
         let msg = "";
